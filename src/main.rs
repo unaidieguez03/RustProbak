@@ -1,16 +1,14 @@
 use macroquad::prelude::*;
 #[macroquad::main("InputKeys")]
 async fn main() {
-    let mut screen_x = screen_width() / 2.0;
-    let mut screen_y = screen_height() / 2.0;
+    let screen_x = screen_width() / 2.0;
+    let screen_y = screen_height() / 2.0;
     print!("{},{}\n", screen_x, screen_y);
     let mut angle = 0.0;
 let mut rotated_positions=[[screen_x+50.0,screen_x-50.0, screen_x-50.0,screen_x+50.0],
-                                                   [screen_y+50.0,screen_y+50.0,screen_y-50.0,screen_y-50.0]];;
-    let mut position_init =[[screen_x+50.0,screen_x-50.0, screen_x-50.0,screen_x+50.0],
                                                    [screen_y+50.0,screen_y+50.0,screen_y-50.0,screen_y-50.0]];
-    let mut rotation_matrix =[[f32::cos(-angle),-f32::sin(-angle)],
-                                             [f32::sin(-angle),f32::cos(-angle)]];
+    let position_init =[[screen_x+50.0,screen_x-50.0, screen_x-50.0,screen_x+50.0],
+                                                   [screen_y+50.0,screen_y+50.0,screen_y-50.0,screen_y-50.0]];
             print!("joder: {}, {}, {}, {}\n", rotated_positions[0][0],rotated_positions[0][1],rotated_positions[0][2],rotated_positions[0][3]);
             print!("joder: {}, {}, {}, {}\n", rotated_positions[1][0],rotated_positions[1][1],rotated_positions[1][2],rotated_positions[1][3]);
     loop {
@@ -19,9 +17,9 @@ let mut rotated_positions=[[screen_x+50.0,screen_x-50.0, screen_x-50.0,screen_x+
         // Llamar a la función async y obtener el resultado
         let new_angle = get_angle(angle).await;
         
-        if(angle!=new_angle){
+        if angle!=new_angle {
             angle = new_angle.to_radians();
-rotation_matrix =[[f32::cos(-angle),-f32::sin(-angle)],
+let rotation_matrix =[[f32::cos(-angle),-f32::sin(-angle)],
                                              [f32::sin(-angle),f32::cos(-angle)]];
             print!("{}, {}\n",angle, new_angle);
             rotated_positions = rotate_positions(rotation_matrix, position_init, (screen_x, screen_y));
@@ -96,23 +94,3 @@ async fn get_angle(angle:f32) -> f32 {
     }
     angle
 }
-async fn get_inputs(x: f32, y: f32) -> (f32, f32) {
-    let mut x = x;
-    let mut y = y;
-
-    if is_key_down(KeyCode::Right) {
-        x += 1.0;
-    }
-    if is_key_down(KeyCode::Left) {
-        x -= 1.0;
-    }
-    if is_key_down(KeyCode::Down) {
-        y += 1.0;
-    }
-    if is_key_down(KeyCode::Up) {
-        y -= 1.0;
-    }
-
-    (x, y)
-}
-
